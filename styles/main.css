@@ -1,0 +1,395 @@
+body { 
+	margin: 0;
+	top: 0;
+	right: 0; 
+	bottom: 0; 
+	left:0; 
+	width:100%, 
+	height:100%;
+  background-color:black;
+	/*background-color: rgb(230,230,230);*/
+  /*width:100%;*/
+  /*height:300%;*/
+}
+}
+
+.leaflet-bottom.leaflet-right{
+  opacity: 0;
+
+}
+
+.leaflet-control-attribution{
+  display: none !important;
+  /*background: none;*/
+}
+
+/*.mapbox-improve-map {
+    display: none;
+}*/
+
+.mapbox-logo{
+    display: none !important;
+}
+
+
+.timeAxis line, path, text{
+  /*fill:gray;*/
+  stroke: gray;
+}
+
+
+
+.yAxis line, path, text{
+  /*fill:gray;*/
+  stroke: gray;
+}
+
+.xAxis line, path, text{
+  /*fill:gray;*/
+  stroke: gray;
+}
+
+.sliderAxis line, path, text{
+  /*fill:gray;*/
+  stroke: gray;
+}
+
+.p{
+  fill:gray;
+  stroke:gray;
+}
+
+/* SVG styling */
+svg {
+    font-family: helvetica, sans-serif;
+}
+
+
+
+svg .path {
+  fill: none;
+  stroke-opacity: .75;
+  /*stroke-dasharray: 1,2;*/
+  stroke: steelblue;
+  stroke-width:2px;
+}
+
+svg .path_doc {
+  fill: none;
+  stroke-opacity: .75;
+  /*stroke-dasharray: 1,2;*/
+  stroke: lightgreen;
+  stroke-width:2px;
+}
+
+svg .path_pharm_only {
+  fill: none;
+  stroke-opacity: 1;
+  stroke-dasharray: 3,5;
+  stroke: steelblue;
+  stroke-width:2px;
+}
+
+#radio{
+  position: absolute;
+  top: 18%;
+  left: 40%;
+  text-align: center;
+  /*color: #efedf5;*/
+  width: 80px;
+  height:50px;
+  bottom: 190px;
+  color: darkgrey;
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  /*background: black;*/
+}
+
+#patientHeader{
+  position: absolute;
+  top: 400px;
+  left: 8%;
+  /*color: #efedf5;*/
+  width: 500px;
+  height:40px;
+  bottom: 190px;
+}
+
+.divnames{
+  position: absolute;
+  top: 5%;
+  right: 1%;
+  /*color: #efedf5;*/
+  width: 200px;
+  height:50px;
+  /*bottom: 190px;*/
+  color: white;
+  /*border: 1px solid darkgray;*/
+  /*border-radius: 4px;*/
+  /*background: black;*/
+}
+
+#imgsrc{
+  width:30px;
+  height:30px;
+  position: relative;
+  margin-top:8%;
+}
+
+.id{
+  position: absolute;
+  top:20%;
+  right: 32%;
+  color: gray;
+  width: 120px;
+  height:50px;
+  /*bottom: 190px;*/
+  /*color: white;*/
+ /* border: 1px solid darkgray;
+  border-radius: 4px;
+  background: black;*/
+}
+
+.divnames2{
+  position: absolute;
+  top:8%;
+  left: 36%;
+  /*color: #efedf5;*/
+  width: 200px;
+  height:50px;
+  /*bottom: 190px;*/
+  color: white;
+
+ /* border: 1px solid darkgray;
+  border-radius: 4px;
+  background: black;*/
+}
+
+.divnames3{
+  position: absolute;
+  top: 8%;
+  right: 1%;
+  /*color: #efedf5;*/
+  width: 150px;
+  height:50px;
+  bottom: 190px;
+  color: white;
+  /*border: 1px solid darkgray;
+  border-radius: 4px;
+  background: black;*/
+}
+
+
+
+.back{
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  /*color: #efedf5;*/
+  width: 80px;
+  height:50px;
+  bottom: 190px;
+  color: white;
+  border: 1px solid darkgray;
+  border-radius: 2px;
+  background: black;
+}
+
+button {
+	/*position: absolute;*/
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    /*padding: 10px 10px;*/
+    text-align: center;
+    text-decoration: none;
+    /*display: inline-block;*/
+    font-size: 16px;
+}
+
+.fillperiod{
+	position: absolute;
+}
+
+flex-container {
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+select{
+	display: inline-block;
+	margin: 0 auto;
+}
+
+div.tooltip {
+  color: white;
+  position: absolute;
+  width: 180px;
+  height: 90px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: rgba(0,0,0,.8);
+  border: 2px solid black;
+  pointer-events: visibleFill;
+  /*cursor:crosshair;*/
+}
+
+div.tooltippatient, div.tooltipgraph { 
+    position: absolute;     
+    text-align: center;     
+    width: 150px;          
+    height: 40px;         
+    /*padding: 2px;       */
+    font: 12px sans-serif;    
+    background: black; 
+    opacity:0.1;
+    /*border: 1px solid white;    */
+    /*border-radius: 8px;     */
+    pointer-events: visibleFill;  
+    color:white;
+    /*cursor:crosshair;*/
+}
+
+
+.svg-container{
+    width: 100%;
+    height:30%;
+}
+
+circle {
+    /*visibility: hidden;*/
+    /*stroke: black;*/
+    /*stroke-width:2;*/
+    stroke:grey;
+   /* fill:#b10026;*/
+    pointer-events: all;
+    cursor: pointer;
+  }
+  .circle.active {
+    /*visibility: visible;*/
+    /*fill:white;*/
+    fill:#fc8d59;
+    opacity:1.0;
+  }
+
+  .circle2 {
+    /*visibility: hidden;*/
+    /*stroke: black;*/
+    /*stroke-width:2;*/
+    /*fill:#b10026;
+    stroke:red;
+    fill:#b10026;*/
+    pointer-events: all;
+    cursor: pointer;
+  }
+  .circle2.active {
+    /*visibility: visible;*/
+    fill:#fc8d59;
+    opacity:1.0;
+  }
+
+.p{
+  position: absolute;
+  bottom:15px;
+  left:10px;
+}
+
+ 
+
+  .ticks {
+      font-size: 10px;
+    }
+
+    .track,
+    .track-inset,
+    .track-overlay {
+      stroke-linecap: round;
+    }
+
+    .track {
+      stroke: #000;
+      stroke-opacity: 0.3;
+      stroke-width: 10px;
+    }
+
+    .track-inset {
+      stroke: #dcdcdc;
+      stroke-width: 8px;
+    }
+
+    .track-overlay {
+      pointer-events: stroke;
+      stroke-width: 50px;
+      stroke: transparent;
+      cursor: crosshair;
+    }
+
+    .handle {
+      fill: #fff;
+      stroke: #000;
+      stroke-opacity: 0.5;
+      stroke-width: 1.25px;
+    }
+
+
+ div.info { 
+    position: relative;     
+    /*text-align: center;     */
+    width: 100%;          
+    height: 100px;         
+    /*padding: 2px;       */
+    font: 12px sans-serif;    
+    background: black; 
+    border: 1px solid white;    
+    border-radius: 8px;     
+    pointer-events: none;  
+    color:white;   
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+
+
+.table{
+  /*position:absolute;*/
+  right:15px;
+  border: 1px solid white;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border-collapse: separate; 
+  float:right;
+  border-radius:5px;
+  /*border-spacing: 50;*/
+  
+}
+
+a {
+    text-decoration: none;
+}
+
+a:link, a:visited {
+    color: white;
+}
+a:hover {
+    color: red;
+}
+
+#size2{
+  width: 1000px;
+  color: Grey;
+}
+
+#h4{
+  color : Grey;
+  font-family: Georgia;
+  font-size : 150px;
+}
+

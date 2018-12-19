@@ -1,0 +1,5 @@
+ * Create map using d3 or leaflet
+ * Plot spatial data on locations of patients, pharmacies, and doctors
+ * Histogram for patients based on commonalities on prescribed opioid
+ * Identify outliers and investigate cause and effect
+ * Explore different encoding for the data

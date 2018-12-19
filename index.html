@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8>
+
+    <title>Identifying the best drug dealers and cool people to be friend with</title>
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!-- CSS Source -->
+ <link rel="stylesheet" href="./styles/main.css" />
+    <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+	
+
+    <!-- JS Libraries -->
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.6/d3.min.js"></script>
+	<script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
+
+    <!-- JS Source -->
+	<script src="./scripts/timeline.js"></script>
+	<script src="./scripts/networkgraph.js"></script>
+	<script src='scripts/mapapp.js'></script>
+	<script src="scripts/inputSlider.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+			<div class="row mt-0 p-0">
+			<div class='col-md-3'>
+					
+                    
+                        
+                    <input type="text" style="display:inline-block; margin-left: 4px" value='2098621' id="myVal" required="required" placeholder="ENTER ID"> <button id="DIRECTID" style="background-color: black; border-radius: 4px;border:1px solid gray; float:left">Go  </button>
+
+				<!-- <img id="imgsrc" src="patient.svg"><h4 id='timeline-title' class='id'>: 2098621</h4> -->
+			</div>
+			<div class='col-md-7'>
+				
+				<center><h3 class="class="jumbotron" style="display:inline-block; color:lightgray;">
+					Identifying Opioid Abuse in Chicagoland Area
+				</h3></center>
+			</div>
+			<div class='col-md-2'>
+				<img id="imgsrc" src="images/patient.svg"><h4 id='timeline-title' class='id'>: 2098621</h4>
+			</div>
+			
+		</div>
+		
+		<div class="row" id="maps">
+				
+            <div class="col-md-6" id="patient" style="border: 5px solid black; border-left: 10px solid black; border-right: 10px solid black">
+                <svg width=400px id="patsvg" height="400px"></svg>
+               
+            </div>
+			<div class="col-md-6" id="paths" style="border: 5px solid black; border-left: none; border-right: 10px solid black">
+                <svg width=400px id="pathsvg" height="400px"></svg>
+            </div>
+        </div>
+		<div class="row">
+			<div class='col-md-6'>
+				<h4 style="color:gray" class="divnames">Entity Relationships</h4>
+			</div>
+			<div class='col-md-6'>
+				<h4 style="color:gray" class="divnames">Prescriptions vs Time</h4>
+			</div>
+		</div>
+        <div class="row" id="gantt-items" style="background-color: #202020; border: 5px solid black; border-left: 10px solid black;border-right: 10px solid black">
+			<div class="col-md-6" id="network" style="border-right: 10px solid black">
+			 </div>
+			<div class="col-md-6" id="gantt-chart" >
+			</div>
+			<div class="col-md-6" id="gantt-filters" >
+			</div>
+       </div>
+	   
+	<div id="radio">
+        <input type="radio" name="people" id="patientRadioSwitch" value="1" checked>Patients<br>
+		<input type="radio" name="people" id="doctorRadioSwitch" value="0" >Doctors<br>
+	</div>
+	<div>
+				<h4 style="display:inline-block; color:gray" class="divnames2">
+					Patient Locations
+				</h4>
+			</div>
+			<div>
+				<h4 style="color:gray" class="divnames3">Pharmacy Paths</h4>
+			</div>
+		
+	<button type="button" class="back" id="backButton"><img id="imgsrc" src="images/back-arrow.svg"></button>
+	<div id="patientHeader">
+	</div>
+
+    </div>
+    <script>
+	var backStack = new Array();
+
+    // $('leaflet-bottom.leaflet-right').remove();
+	d3.queue()
+    .defer(d3.csv,"https://gist.githubusercontent.com/tehwentzel/24bf8357ad86a3db70510480b020d7d3/raw/4468783d3445b83b4350ac1c1327a0b592c8cfdf/455_pharmacies.csv")
+    .defer(d3.csv,"https://gist.githubusercontent.com/tehwentzel/dffda18347efbfeae22b0e68841a970b/raw/5e8b2a9c53814a124dc9e99f19d683adc9191748/500_doctors.csv")
+    .defer(d3.csv,"https://gist.githubusercontent.com/tehwentzel/24bf8357ad86a3db70510480b020d7d3/raw/4468783d3445b83b4350ac1c1327a0b592c8cfdf/5000_patients.csv")
+    .defer(d3.csv,"https://gist.githubusercontent.com/tehwentzel/24bf8357ad86a3db70510480b020d7d3/raw/4468783d3445b83b4350ac1c1327a0b592c8cfdf/27073_prescriptions.csv")
+	.defer(d3.csv,"https://gist.githubusercontent.com/tehwentzel/77c2e8602878214e470163dede3faede/raw/09a47838aa75987212c408e3b4382c6f7949b7bd/node_graph1.csv")
+    .await(start_here);
+	
+    function start_here(error, PHARMACY_LOC, DOCTOR_LOC, PATIENT_LOC,PRESCRIPTION_LOC,NODE_GRAPH) {
+		//main loop
+        if (error) return console.log(error);
+		console.log("running");//this is neccessary because
+		var swapImage = function(){
+		//switches the image in the top left corner
+			$('#imgsrc').attr('src', 
+				(is_patient? "images/patient.svg": "images/doctor.svg")
+			);
+		};
+		
+		var selectCurrentId = function(){
+		//sets the id in views 2-3 to currentSelection (the person who was just clicked, ideally)
+			// d3.selectAll('.tooltippatient').remove();
+			//these need to before paths = pathMap... for the backbutton to draw the path always
+			let was_patient = is_patient;
+			is_patient = (currentSelection.type == "Patient");
+			document.getElementById("patientRadioSwitch").checked = is_patient;
+			document.getElementById("doctorRadioSwitch").checked = !is_patient;
+			timeline.setID(currentSelection.id, currentSelection.type, null);
+			paths = pathMap(PHARMACY_LOC, PRESCRIPTION_LOC, is_patient, currentSelection.id);
+			CallingNodeGraph(currentSelection.id, NODE_GRAPH, currentSelection.type);
+			swapImage();
+			if(was_patient != is_patient){
+				change_indiLoc(PHARMACY_LOC, DOCTOR_LOC, PATIENT_LOC,PRESCRIPTION_LOC);
+			}
+			initGraphOnClick();
+		}
+		
+		var initGraphOnClick = function(){
+		//sets up listener for click event on the node graph
+			d3.select('.nodes').selectAll('circle').on('dblclick',function(d){
+				if(d.group == 'Patient' || d.group == 'Doctor'  || d.group == "Hospital"){
+					backStack.push(currentSelection);
+					currentSelection = {id: d.id, type: d.group};
+					//d3.selectAll('.tooltippatient').remove();
+					selectCurrentId();
+				}
+			});
+		}
+		
+		var change_indiLoc = function(PHARMACY, DOCTOR, PATIENT,PRESCRIPTION, selected_id){
+		//redraws the map (view 1) when we use some kind of selection filter/button
+			var addresses; //get the dots so we can set a listener up 
+			d3.selectAll("circle.dot").remove();
+			if(is_patient == true){
+				addresses = patientMap(PATIENT, PRESCRIPTION, is_patient, null);
+				valueSlider.draw(PATIENT_LOC, 'patient', selected_id);
+			}
+			else{
+				addresses = patientMap(DOCTOR, PRESCRIPTION, is_patient, null);
+				valueSlider.draw(DOCTOR_LOC, 'doctor', selected_id);
+			}
+			valueSlider.setOnClick(change_indiLoc,PHARMACY_LOC, DOCTOR_LOC, PATIENT_LOC,PRESCRIPTION_LOC);
+			addresses.call(setDotOnClick);
+		}
+		
+		var setDotOnClick = g => g.on('click', function(d){
+		//sets onclick for map view (view 1) after it's redrawn
+			backStack.push(currentSelection);
+			if(is_patient){
+				currentSelection = {id: d.pat_id, type: "Patient"};
+			}
+			else{
+				currentSelection = {id: d.physiciannpi, type: "Doctor"};
+			}
+			selectCurrentId();
+		});
+		
+		d3.select("#radio").selectAll("input").on('click',function(d){
+		//event when radio button is clicked
+			var was_patient = (is_patient)? true:false;
+			is_patient = document.getElementById("patientRadioSwitch").checked;
+			if(is_patient != was_patient){
+				d3.select(".divnames2").text( (is_patient? "Patient": "Doctor") + " Locations");
+				//$('#imgsrc').attr('src', (is_patient? "images/patient.svg": "images/doctor.svg"));
+				d3.selectAll("circle.dot").remove();
+				change_indiLoc(PHARMACY_LOC, DOCTOR_LOC, PATIENT_LOC,PRESCRIPTION_LOC);
+				if(is_patient != (currentSelection.type == "Patient")){
+					d3.select("#gantt-items").selectAll("svg")
+						.attr('visibility','hidden');
+					d3.select("#paths").selectAll("circle,path").attr('visibility', 'hidden');
+				}
+			}
+		});
+		
+		d3.select("#backButton").on('click',function(){
+		//backbutton listener
+			if(backStack.length > 0){
+				currentSelection = backStack.pop();
+				selectCurrentId();
+			}
+		});
+		
+		d3.select("#DIRECTID").on('click',function(){
+		//text input
+			var idInput = document.getElementById("myVal").value;
+			var isValid = NODE_GRAPH.some(function(d){
+				return ((d.pat_id == idInput) || (d.physiciannpi == idInput));
+			});
+			if(isValid && idInput.length > 0){
+				backStack.push(currentSelection);
+				var idType = (idInput.length < 8)? "Patient":"Doctor";
+				currentSelection = {id: idInput, type: idType};
+				console.log(currentSelection);
+				selectCurrentId();
+				document.getElementById("myVal").placeholder = "Enter ID";
+			} else{
+				document.getElementById("myVal").value = null;
+				document.getElementById("myVal").placeholder = "Invalid Input";
+			}
+		});
+		//this gives a function that draws colors
+		colorPicker = colorSelector(PATIENT_LOC, DOCTOR_LOC, PHARMACY_LOC);
+		//set up the color gradient and draw the slider
+		valueSlider.setScale(colorPicker);
+		valueSlider.draw(PATIENT_LOC,"patient");
+		//function that draws map for top left map
+		var is_patient = true;
+		var selected_id = 2098621;
+		var patientMap = getMap('patient', colorPicker);
+		//function that draws map for top right
+		var pathMap = getMap('paths', colorPicker, DOCTOR_LOC);
+		//preload someone?
+		//for the stack
+		var currentSelection = {id: selected_id, type: "Patient"};
+		//seting up a new timeline - call setId after
+		timeline = new TimeLine(selected_id, PRESCRIPTION_LOC, is_patient? "Patient":"Doctor");
+		//darw node graph
+		CallingNodeGraph(selected_id, NODE_GRAPH, "Patient");
+		//draw paths
+		//I'm not sure if we actually need this anymore but I'm afraid to break things.
+		change_indiLoc(PHARMACY_LOC, DOCTOR_LOC, PATIENT_LOC,PRESCRIPTION_LOC);
+		paths = pathMap(PHARMACY_LOC, PRESCRIPTION_LOC, is_patient, selected_id);
+		initGraphOnClick();
+    }
+
+ 
+    </script>
+    
+</body>
+</html>
+
+
+    
+
+</body>
+</html>

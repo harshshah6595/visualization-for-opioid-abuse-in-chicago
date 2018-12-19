@@ -1,0 +1,5 @@
+ * Clean data to extract timeline information
+ * Prototype standard gantt-chart visualization for patient visits and visualization
+ * Prototype sword-plot visualization for patient visits
+ * Explore other timeline visualization encoding alternatives
+ 
